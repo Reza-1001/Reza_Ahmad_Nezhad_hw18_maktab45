@@ -1,15 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const url = require('url');
-const user = require('./../models/user');
+const User = require('./../models/user');
+
+
 router.get('/register', (req, res) => {
     res.render("register", {
         msg: ''
-    }); 
+    });
 
 })
-router.post('/registerpage', (req, res) => {
-    if (!req.body.userName || !req.body.pass) {
+router.post('/register', (req, res) => {
+    if (!req.body.username || !req.body.password) {
         return res.redirect(url.format({
             pathname: "/api/auth/register",
             query: {
@@ -17,7 +19,9 @@ router.post('/registerpage', (req, res) => {
             }
         }))
     }
-    user.findOne({username :req.body.username.trim()},(err,user) => {
+    User.findOne({
+        username: req.body.username.trim()
+    }, (err, user) => {
         if (err) {
             return res.redirect(url.format({
                 pathname: "/api/auth/register",
@@ -25,7 +29,7 @@ router.post('/registerpage', (req, res) => {
                     "msg": "Server Error"
                 }
             }))
-        } 
+        }
         if (user) {
             return res.redirect(url.format({
                 pathname: "/api/auth/register",
@@ -33,11 +37,13 @@ router.post('/registerpage', (req, res) => {
                     "msg": "Username Already Exists"
                 }
             }))
-        } 
-        new user ({
+        }
+        const NEW_USER = new User({
             username: req.body.username,
             password: req.body.password
-        }).save();
+        })
+
+        NEW_USER.save()
     })
 })
 
