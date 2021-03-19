@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const url = require('url');
+const bcrypt = require('bcrypt');
 const User = require('./../models/user');
 
 
@@ -43,7 +44,66 @@ router.post('/register', (req, res) => {
             password: req.body.password
         })
 
-        NEW_USER.save()
+        NEW_USER.save(err=>{
+           return res.redirect('/api/auth/login');
+        })
+
+    })
+})
+
+router.get('/login',(req,res)=>{
+    res.render('login');
+})
+
+router.post('/login',(req,res)=>{
+    if (!req.body.username || !req.body.password) {
+        return res.redirect(url.format({
+            pathname: "/api/auth/login",
+            query: {
+                "msg": "Empty Fields"
+            }
+        }))
+    }
+    User.findOne({username: req.body.username},(err,user)=>{
+        if (err) {
+            console.log(err);
+            return res.redirect(url.format({
+                pathname: "/api/auth/login",
+                query: {
+                    "msg": "Server Error"
+                }
+            }))
+        } 
+        if (!user){
+            return res.redirect(url.format({
+                pathname: "/api/auth/login",
+                query: {
+                    "msg": "User Not Found"
+                }
+            })) 
+        }
+
+        bcrypt.compare(req.body.password,user.password,function(err,passCompResult){
+            if (err){
+                
+                return res.redirect(url.format({
+                    pathname: "/api/auth/login",
+                    query: {
+                        "msg": "User Not Foundx"
+                    }
+                })) 
+            }
+            if (!passCompResult){
+                return res.redirect(url.format({
+                    pathname: "/api/auth/login",
+                    query: {
+                        "msg": "User Not Found"
+                    }
+                })) 
+            } 
+            res.render('dashboard',{user})
+            
+        })
     })
 })
 
