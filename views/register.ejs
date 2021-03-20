@@ -7,27 +7,26 @@
     <title>Register</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-        <link rel="stylesheet" href="/css/style.css">
-        <script src="https://kit.fontawesome.com/3ebeec4ad6.js" crossorigin="anonymous"></script>
+        
+
 </head>
 
 <body>
     <form action="/api/auth/register" method="POST">
         <div class="form font">
-            <div class="login-box ">
+            <div class="login-box">
                 <label>ثبت نام</label>
                 <div class="input">
-                    <div class="inputbox border inputWithIcon font">
+                    <div class="inputbox border font">
                         <input id="user-name" name="username" class="font" type="text" placeholder="نام کاربری">
-                        <i class="fas fa-user-alt"></i>
                     </div>
-                    <div class="inputbox border inputWithIcon">
+                    <div class="inputbox border">
                         <input id="password" name="password" class="font" type="password" placeholder="رمز عبور">
-                        <i class="fas fa-lock"></i>
+                    
                     </div>
-                    <div class="inputbox border inputWithIcon">
+                    <div class="inputbox border">
                         <input id="pass-repeat" class="font" type="password" placeholder=<%= msg ? msg : `تکرار رمز عبور` %>>
-                        <i class="fas fa-lock"></i>
+                    
                     </div>
                     <div class="inputbox border">
                         <input class="font" type="submit" value="ثبت نام">

@@ -3,9 +3,9 @@ const router = express.Router();
 const url = require('url');
 const bcrypt = require('bcrypt');
 const User = require('./../models/user');
+const generalTools=require('./../tools/general-tools');
 
-
-router.get('/register', (req, res) => {
+router.get('/register',generalTools.SessionCheck,(req, res) => {
     res.render("register", {
         msg: ''
     });
@@ -44,18 +44,18 @@ router.post('/register', (req, res) => {
             password: req.body.password
         })
 
-        NEW_USER.save(err=>{
-           return res.redirect('/api/auth/login');
+        NEW_USER.save(err => {
+            return res.redirect('/api/auth/login');
         })
 
     })
 })
 
-router.get('/login',(req,res)=>{
+router.get('/login',generalTools.SessionCheck, (req, res) => {
     res.render('login');
 })
 
-router.post('/login',(req,res)=>{
+router.post('/login', (req, res) => {
     if (!req.body.username || !req.body.password) {
         return res.redirect(url.format({
             pathname: "/api/auth/login",
@@ -64,7 +64,9 @@ router.post('/login',(req,res)=>{
             }
         }))
     }
-    User.findOne({username: req.body.username},(err,user)=>{
+    User.findOne({
+        username: req.body.username
+    }, (err, user) => {
         if (err) {
             console.log(err);
             return res.redirect(url.format({
@@ -73,36 +75,37 @@ router.post('/login',(req,res)=>{
                     "msg": "Server Error"
                 }
             }))
-        } 
-        if (!user){
+        }
+        if (!user) {
             return res.redirect(url.format({
                 pathname: "/api/auth/login",
                 query: {
                     "msg": "User Not Found"
                 }
-            })) 
+            }))
         }
 
-        bcrypt.compare(req.body.password,user.password,function(err,passCompResult){
-            if (err){
-                
+        bcrypt.compare(req.body.password, user.password, function (err, passCompResult) {
+            if (err) {
+
                 return res.redirect(url.format({
                     pathname: "/api/auth/login",
                     query: {
                         "msg": "User Not Foundx"
                     }
-                })) 
+                }))
             }
-            if (!passCompResult){
+            if (!passCompResult) {
                 return res.redirect(url.format({
                     pathname: "/api/auth/login",
                     query: {
                         "msg": "User Not Found"
                     }
-                })) 
-            } 
-            res.render('dashboard',{user})
-            
+                }))
+            }
+            req.session.user = user;
+            res.redirect('/api/user/dashboard');
+
         })
     })
 })

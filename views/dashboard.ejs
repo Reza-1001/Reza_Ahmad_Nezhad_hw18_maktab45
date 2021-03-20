@@ -1,11 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
 </head>
+
 <body>
+
     <p> Hi <%= user.username %></p>
+    <form action="/api/user/logout" method="get">
+        <button type="submit">Log Out</button>
+    </form>
+    <form action="/api/delete" method="get">
+        <button type="submit">Delete Account</button>
+    </form>
+
 </body>
+
 </html>
