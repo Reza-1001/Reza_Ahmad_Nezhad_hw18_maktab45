@@ -80,18 +80,23 @@ router.post('/login', (req, res) => {
             return res.redirect(url.format({
                 pathname: "/api/auth/login",
                 query: {
-                    "msg": "User Not Found"
+                    "msg": "User Not Found1"
                 }
             }))
         }
 
         bcrypt.compare(req.body.password, user.password, function (err, passCompResult) {
+            console.log("req.body.password")
+            console.log(req.body.password)
+            console.log("user.password")
+            console.log(user.password)
+            console.log(passCompResult)
             if (err) {
 
                 return res.redirect(url.format({
                     pathname: "/api/auth/login",
                     query: {
-                        "msg": "User Not Foundx"
+                        "msg": "User Not Found2"
                     }
                 }))
             }
@@ -99,7 +104,7 @@ router.post('/login', (req, res) => {
                 return res.redirect(url.format({
                     pathname: "/api/auth/login",
                     query: {
-                        "msg": "User Not Found"
+                        "msg": "User Not Found3"
                     }
                 }))
             }
